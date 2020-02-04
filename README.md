@@ -19,9 +19,9 @@
 
 ### Create a Lambda service role
 
-**Role Name:** lambda-capture-ec2-console-screenshots
+**Role Name:** capture-ec2-console-screenshots
 
-Use `lambda-capture-ec2-console-screenshots.json` policy document to allow lambda function to capture and save screenshots in a S3 bucket.
+Use `capture-ec2-console-screenshots.json` policy document to allow lambda function to capture and save screenshots in a S3 bucket.
 
 ![Lambda Service Role](/images/role.png)
 
