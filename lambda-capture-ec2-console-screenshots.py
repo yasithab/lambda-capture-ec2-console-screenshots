@@ -1,30 +1,41 @@
+import os
 import boto3
+import base64
 import datetime
 import pprint
-import base64
-#import sys
-#import collections
-
-ec2 = boto3.client('ec2')
-
-s3 = boto3.client('s3')
-
-# datetime object containing current date and time
-now = datetime.datetime.now()
-
-# YYYY/MM/DD-HMS
-dt_string = now.strftime("%Y%m%d-%H%M%S")
 
 def lambda_handler(event, context):
 
+    # Read environment variables
+    TAG_KEY = os.environ['TAG_KEY']
+    TAG_VALUE = os.environ['TAG_VALUE']
+    S3_BUCKET_NAME = os.environ['S3_BUCKET_NAME']
+
+    # A low-level client representing Amazon Elastic Compute Cloud (EC2)
+    ec2 = boto3.client('ec2')
+
+    # A low-level client representing Amazon Simple Storage Service (S3)
+    s3 = boto3.client('s3')
+
+    # A datetime object containing current date and time
+    now = datetime.datetime.now()
+
+    # Formate datetime as YYYYMMDD-HMS
+    dt = now.strftime("%Y%m%d-%H%M%S")
+
+    # Return instances which have specific tag key/value pair
     reservations = ec2.describe_instances(Filters=[
         {
             'Name': 'tag-key',
-            'Values': ['screenshot', 'true']
+            'Values': [TAG_KEY, TAG_VALUE]
         },
     ]).get('Reservations', [])
 
-    instances = sum([[i for i in r['Instances']] for r in reservations], [])
+    instances = sum(
+    [
+        [i for i in r['Instances']]
+        for r in reservations
+    ], [])
 
     print("Found %d instances that need to capture console screenshots" % len(instances))
     
@@ -32,22 +43,16 @@ def lambda_handler(event, context):
         InstanceName = [
             str(t.get('Value')) for t in instance['Tags']
             if t['Key'] == 'Name'][0]
-        #print (InstanceName)
-        
-        #print(instance["InstanceId"])
         
         response = ec2.get_console_screenshot(
             DryRun=False,
             InstanceId=instance["InstanceId"],
             WakeUp=True
         )
-        #print(response["ImageData"])
-        
-        #picture = base64.b64decode(response["ImageData"])
         
         response = s3.put_object(
-	        Bucket = 'yasitha-test',
-	        Body = base64.b64decode(response["ImageData"]),
-	        Key = InstanceName + "/" + dt_string + ".jpg",
+            Bucket = S3_BUCKET_NAME,
+            Body = base64.b64decode(response["ImageData"]),
+            Key = InstanceName + "/" + dt + ".jpg",
             ServerSideEncryption = 'AES256'
         )
