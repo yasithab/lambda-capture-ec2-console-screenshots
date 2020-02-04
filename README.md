@@ -17,11 +17,13 @@
 | TAG_KEY         | screenshot          |
 | TAG_VALUE       | true                |
 
-### Create a custom role
+### Create a Lambda service role
 
-* **Role Name:** lambda-capture-ec2-console-screenshots
+![Lambda Service Role](/images/role.png)
 
-Use lambda-capture-ec2-console-screenshots.json policy document to allow lambda function to capture and save screenshots in a S3 bucket.       
+**Role Name:** lambda-capture-ec2-console-screenshots
+
+Use `lambda-capture-ec2-console-screenshots.json` policy document to allow lambda function to capture and save screenshots in a S3 bucket.
 
 ### Set Timeout
 
