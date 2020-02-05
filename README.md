@@ -14,8 +14,8 @@
 | KEY             | VALUE               |
 | --------------- | ------------------- |
 | S3_BUCKET_NAME  | console-screenshots |
-| TAG_KEY         | screenshot          |
-| TAG_VALUE       | true                |
+| EC2_TAG_KEY     | screenshot          |
+| EC2_TAG_VALUE   | true                |
 
 ### Create a Lambda service role
 

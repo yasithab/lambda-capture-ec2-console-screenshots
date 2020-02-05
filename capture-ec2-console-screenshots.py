@@ -7,8 +7,8 @@ import pprint
 def lambda_handler(event, context):
 
     # Read environment variables
-    TAG_KEY = os.environ['TAG_KEY']
-    TAG_VALUE = os.environ['TAG_VALUE']
+    EC2_TAG_KEY = os.environ['EC2_TAG_KEY']
+    EC2_TAG_VALUE = os.environ['EC2_TAG_VALUE']
     S3_BUCKET_NAME = os.environ['S3_BUCKET_NAME']
 
     # A low-level client representing Amazon Elastic Compute Cloud (EC2)
@@ -27,7 +27,7 @@ def lambda_handler(event, context):
     reservations = ec2.describe_instances(Filters=[
         {
             'Name': 'tag-key',
-            'Values': [TAG_KEY, TAG_VALUE]
+            'Values': [EC2_TAG_KEY, EC2_TAG_VALUE]
         },
     ]).get('Reservations', [])
 
