@@ -1,4 +1,4 @@
-## Lambda function to capture EC2 console screenshots and save it in a S3 bucket every 15 minutes.
+## Lambda function to capture EC2 console screenshots and save it in an S3 bucket every 15 minutes.
 
 ### Configure triggers using CloudWatch events
 
